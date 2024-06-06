@@ -1,0 +1,5 @@
+{
+    "instructor":"Alejandro Llanganate",
+    "numberOfStudents":50,
+    "teachingAsistant":"Anahi Vasquez"
+}

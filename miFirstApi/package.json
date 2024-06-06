@@ -1,0 +1,18 @@
+{
+  "name": "mifirstapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "\"express\"",
+    "\"nodejs\""
+  ],
+  "author": "Jerson Andino github@jersonandino",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.1"
+  }
+}

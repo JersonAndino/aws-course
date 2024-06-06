@@ -1,0 +1,156 @@
+Servicios existentes:
+
+1 link_to_pay_nuvei: https://link-to-pay-nuvei-egdosfq4ia-uc.a.run.app
+2 webhook_nuvei: https://webhook-nuvei-egdosfq4ia-uc.a.run.app
+3 refund_nuvei: https://refund-nuvei-egdosfq4ia-uc.a.run.app
+4 notify_email_transfer: https://notify-email-transfer-egdosfq4ia-uc.a.run.app 
+
+################################################
+1 link_to_pay_nuvei: https://link-to-pay-nuvei-egdosfq4ia-uc.a.run.app
+
+input_json:
+{
+    "user_id":"customer_id",                //dni
+    "user_email":"test@some.com",           //email
+    "user_name":"jerson",                   //name
+    "user_last_name":"andino",              //andino
+    "order_description":"something",        //order description (category) 
+    "order_amount":10,                      //amount $
+    "dev_reference":"6lvehFBPSmHNTfuyajIl"  //order_id
+}
+
+if success: status 200
+
+response_json (status 200): 
+{
+    "status":0,                             //indicates that the link was generated correctly
+    "link": "link.to.pay"                    //indicates the link
+}
+
+if a link is already generated in the time of 15 minutes
+
+response_json (status 200):
+{
+    "status": 1,                             // indicates that a link already exists
+    "detail": "Ya existe un link de pago que aun no expira", //the detail of the status
+    "link": "https://link-stg.paymentez.com/checkout/ZknxB6L82gDNjpGPB5O", // the link already generated
+    "transcurred_time": 3.4619488666666665  // the time transcurred of the 15 life minutes of a link
+}
+
+in case of error:
+
+response_json (status 500):
+{
+    'status':'failed',                      //the status of the request
+    'detail': 'python Exception'            //the detail of the error, notificate to backend dev :D
+}
+
+
+################################################
+2 webhook_nuvei: https://webhook-nuvei-egdosfq4ia-uc.a.run.app
+
+input_json:
+{
+  "transaction": {
+     "status": "1",
+     "order_description": "ORDER #1507155336536",
+     "authorization_code": "113310",                        //auth_code
+     "status_detail": "3",
+     "date": "04/10/2017 22:15:37",
+     "message": "Operation Successful",
+     "id": "CI-502",                                        //transaction_id
+     "dev_reference": "6lvehFBPSmHNTfuyajIl",               //order_id
+     "carrier_code": "6",
+     "amount": "10.5",
+     "paid_date": "04/10/2017 19:15:00",
+     "installments": "1",
+     "ltp_id": "LeNgJbx57Vnj9Rnq",
+     "stoken": "d54d8e1751a459b1c7df412a5f963b91",          //stoken unique by each transaction
+     "application_code": "AndroidTest",
+     "terminal_code": "12334"
+  },
+  "user": {
+     "id": "0101010101",                                    //user_id, this must be valid
+     "email": "user@example.com"
+  },
+  "card": {
+     "bin": "411111",
+     "holder_name": "Martin Mucito",
+     "type": "vi",
+     "number": "1111",
+     "origin": "ORIGIN",
+     "fiscal_number": "2365448809"
+  }
+}
+
+if success: status 200
+
+response_json (status 200): 
+{
+    "status": "success",                             //indicates that the webhook recipe the request Successfully
+}
+
+if the stoken have errors:
+response_json (status 203): 
+{
+    "status": "token error",                             //indicates that the stoken do not match with the generated internally
+}
+
+in case of error:
+
+response_json (status 500):
+{
+    'status':'failed',                      //the status of the request
+    'detail': 'python Exception'            //the detail of the error, notificate to backend dev :D
+}
+
+
+################################################
+3 refund_nuvei: https://refund-nuvei-egdosfq4ia-uc.a.run.app
+
+input_json:
+{
+    "status":"CI-502",                      //transaction id of nuvei
+    "amount": 10                            //amount of the refund, doesn't matter what amount is, the refund is total
+}
+
+
+response_json (status 200): 
+{
+    "status":"success",                     //indicates that the refund was completed succesfully
+    "detail": "Completed"                    
+}
+
+if the refund is denied or there is an error in nuvei
+
+response_json (status 200):
+{
+    "status": "failed",                     // indicates that exist an error in the refund
+    "detail": "initiated"
+}
+
+in case of error:
+
+response_json (status 500):
+{
+    'status':'failed',                      //the status of the request
+    'detail': 'python Exception'            //the detail of the error, notificate to backend dev :D
+}
+
+
+
+########################################################33
+4 notify_email_transfer: https://notify-email-transfer-egdosfq4ia-uc.a.run.app 
+
+input_json:
+{
+    "correo":"albeiro.andino@gmail.com",
+    "nombre":"Jerson",
+    "apellido":"Andino",
+    "fecha":"today",
+    "dni":"1004998678",
+    "categoria":"cena",
+    "monto":10,
+    "cena":true
+}
+
